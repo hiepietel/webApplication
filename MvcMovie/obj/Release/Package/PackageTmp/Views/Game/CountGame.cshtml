@@ -1,0 +1,316 @@
+﻿
+@{
+    ViewBag.Title = "CountGame";
+}
+
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>lab5</title>
+    
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/latest.js?config=TeX-MML-AM_CHTML" async></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+   
+    <!--<script type="text/javascript" src="script.js"></script>-->
+    <style>
+        #intro, #game, #end {
+            text-align: center;
+            width: 100%;
+        }
+
+        .slidecontainer {
+            width: 100%;
+        }
+
+        .slider {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 25px;
+            background: #d3d3d3;
+            outline: none;
+            opacity: 0.7;
+            -webkit-transition: .2s;
+            transition: opacity .2s;
+        }
+
+            .slider:hover {
+                opacity: 1;
+            }
+
+            .slider::-webkit-slider-thumb {
+                -webkit-appearance: none;
+                appearance: none;
+                width: 25px;
+                height: 25px;
+                background: #0000aa;
+                cursor: pointer;
+            }
+
+            .slider::-moz-range-thumb {
+                width: 25px;
+                height: 25px;
+                background: #11A350;
+                cursor: pointer;
+            }
+    </style>
+
+    <script>
+        $(document).ready(function () {
+            $("#game").hide();
+            $("#eq1").hide();
+            $("#eq2").hide();
+            $("#eq3").hide();
+            $("#end").hide();
+            $("#intro").click(function () {
+                $("#game").show();
+                $("#intro").hide();
+                //$("#eq1").hide();
+                //$("#eq2").hide();
+                //$("#eq3").hide();
+            });
+        });
+        function showOne() {
+            $("#eq1").show();
+            console.log("eq1");
+        };
+        function showTwo() {
+            $("#eq1").hide();
+            $("#eq2").show();
+            //console.log("eq1");
+        };
+        function showThree() {
+            $("#eq2").hide();
+            $("#eq3").show();
+        }
+        function gameOverShow() {
+            $("#game").hide();
+            $("#end").show();
+        }
+    </script>
+</head>
+<body>
+    <div id="intro">
+        <h1>In this game the tast is to count three equation<br /> <b>Press Start to start the game</b></h1>
+        <button type="button" class="btn btn-success btn-lg" onClick="gameLoop()">start game</button>
+    </div>
+    <div id="game">
+        <blockquote>
+            <p id="eq1">
+                $$\int_{-2}^{2} -3x^2+12 dx$$
+            </p>
+            <p id="eq2">
+                $$\int_{0}^{2\pi} 3sin(0.5x) dx$$
+            </p>
+            <p id="eq3">
+                $$\int_{0}^{3} -4x^3+12x^2 dx$$
+            </p>
+        </blockquote>
+        <canvas id="myCanvas" width="600" height="300" style="border: 1px solid black;"></canvas>
+        <br />
+        <input type="range" min="0" max="50" value="0" class="slider" id="myRange">
+        <p>Value: <span id="demo"></span></p>
+        <button type="button" class="btn btn-primary" onClick="checkTask()">confirm</button>
+    </div>
+    <div id="end">
+        <h1>
+            brawo! udalo Ci sie dobrze rozwiazac zadania!
+        </h1>
+        <p id="time"></p>
+    </div>
+    <script src="~/Scripts/countGame.js"></script>
+    <!--<script>
+        var slider = document.getElementById("myRange");
+    var output = document.getElementById("demo");
+    output.innerHTML = slider.value;
+
+    slider.oninput = function() {
+      output.innerHTML = this.value;
+    }
+        function Graph(config){
+            this.canvas = document.getElementById(config.canvasId);
+            this.minX = config.minX;
+            this.minY = config.minY;
+            this.maxX = config.maxX;
+            this.maxY = config.maxY;
+            this.unitsPerTick = config.unitsPerTick;
+
+            //scale
+            this.axisColor = "#aaa";
+            this.font = "8pt Calibri";
+            this.tickSize = 20;
+
+            this.context = this.canvas.getContext("2d");
+            this.rangeX = this.maxX - this.minX;
+            this.rangeY = this.maxY - this.minY;
+            this.unitX = this.canvas.width / this.rangeX;
+            this.unitY = this.canvas.height / this.rangeY;
+            this.centerY = Math.round(Math.abs(this.minY / this.rangeY) *this.canvas.height);
+            this.centerX = Math.round(Math.abs(this.minX / this.rangeX) *this.canvas.width);
+            this.iteration = (this.maxX - this.minY)/1000;
+            this.scaleX = this.canvas.width / this.rangeX;
+            this.scaleY = this.canvas.height / this.rangeY;
+
+            //rysowanie osi
+            this.drawXAxis();
+            this.drawYAxis();
+        }
+        Graph.prototype.drawXAxis = function(){
+            var context = this.context;
+            context.save();
+            context.beginPath();
+            context.moveTo(0,this.centerY);
+            context.lineTo(this.canvas.width, this.centerY);
+            context.strokeStyle = this.axisColor;
+            context.lineWidth = 2;
+            context.stroke();
+
+            //ryoswanie kresek na osi
+
+            var xPosIncrement = this.unitsPerTick * this.unitX;
+            var xPos, unit;
+            context.font = this.font;
+            context.textAlign = "center";
+            context.textBaseline="top";
+
+            //kreseczki po lewej
+            xPos = this.centerX - xPosIncrement;
+            unit = -1 * this.unitsPerTick;
+            while(xPos >0){
+                context.moveTo(xPos, this.centerY - this.tickSize / 2);
+                context.lineTo(xPos, this.centerY + this.tickSize / 2);
+                context.stroke();
+                context.fillText(unit, xPos, this.centerY + this.tickSize / 2 +3);
+                unit -= this.unitsPerTick;
+                xPos = Math.round(xPos - xPosIncrement);
+            }
+
+
+
+            //kreseczki po prawej
+            xPos = this.centerX + xPosIncrement;
+            unit = this.unitsPerTick;
+            while(xPos<this.canvas.width){
+                context.moveTo(xPos, this.centerY - this.tickSize / 2);
+                context.lineTo(xPos, this.centerY + this.tickSize / 2);
+                context.stroke();
+                context.fillText(unit, xPos, this.centerY + this.tickSize / 2 +3);
+                unit += this.unitsPerTick;
+                xPos = Math.round(xPos + xPosIncrement);
+            }
+            context.restore();
+        };
+        Graph.prototype.drawYAxis = function(){
+            var context = this.context;
+            context.save();
+            context.beginPath();
+            context.moveTo(this.centerX, 0);
+            context.lineTo(this.centerX, this.canvas.height);
+            context.strokeStyle = this.axisColor;
+            context.lineWidth = 2 ;
+            context.stroke();
+
+
+            //rysowanie kreseczek
+
+            var yPosIncrement = this.unitsPerTick * this.unitY;
+            var yPos, unit;
+            context.font = this.font;
+            context.textAlign = "right";
+            context.textBaseline = "middle";
+            //kreseczki o gory
+            yPos = this.centerY - yPosIncrement;
+            unit = this.unitsPerTick;
+            while(yPos>0){
+                context.moveTo(this.centerX - this.tickSize /2, yPos);
+                context.lineTo(this.centerX + this.tickSize/2, yPos);
+                context.stroke();
+                context.fillText(unit, this.centerX - this.tickSize / 2 -3, yPos);
+                unit += this.unitsPerTick;
+                yPos = Math.round(yPos - yPosIncrement);
+            }
+
+            //kreseczki u dolu
+            yPos = this.centerY + yPosIncrement;
+            unit = -1 * this.unitsPerTick;
+            while(yPos< this.canvas.height){
+                context.moveTo(this.centerX - this.tickSize / 2, yPos);
+                context.lineTo(this.centerX + this.tickSize / 2, yPos);
+                context.stroke();
+                context.fillText(unit, this.centerX - this.tickSize / 2 - 3, yPos);
+                unit -= this.unitsPerTick;
+                yPos = Math.round(yPos + yPosIncrement);
+            }
+            context.restore();
+
+        }
+        Graph.prototype.drawEquation = function(equation, color, thickness, minBorder, maxBorder, colorBorder){
+            var context = this.context;
+            context.save();
+            this.transformContext();
+            context.beginPath();
+            for(var x = minBorder +this.iteration; x<=maxBorder; x+=this.iteration){
+                context.moveTo(x,0);
+                context.lineTo(x, equation(x));
+            }
+
+            context.restore();
+            context.lineJoin = "round";
+            context.lineWidth = thickness;
+            context.strokeStyle = colorBorder;
+
+            context.stroke();
+            context.restore();
+
+            var context = this.context;
+            context.save();
+            this.transformContext();
+
+            context.beginPath();
+            context.moveTo(this.minX, equation(this.minX));
+
+            for(var x = this.minX + this.iteration; x <= this.maxX; x+= this.iteration){
+                context.lineTo(x, equation(x));
+            }
+
+            context.restore();
+            context.lineJoin = "round";
+            context.lineWidth = thickness;
+            context.strokeStyle = color;
+
+            context.stroke();
+            context.restore();
+
+
+        };
+        Graph.prototype.transformContext = function(){
+            var context = this.context;
+
+            this.context.translate(this.centerX, this.centerY);
+
+            context.scale(this.scaleX, this.scaleY);
+        }
+        window.onload = function(){
+            var myGraph = new Graph({
+                canvasId :"myCanvas",
+                minX: -10,
+                minY: -10,
+                maxX: 10,
+                maxY: 10,
+                unitsPerTick: 1
+                });
+            myGraph.drawEquation(function(x){
+                return -5 * Math.sin(x); }, "green", 3, -Math.PI,Math.PI, "blue");
+            //myGraph.drawEquation(function(x){
+            //return -x*x}, "red", 3);
+            //myGraph.drawEquation(function(x){
+            //return -0.02*x*x*x}, "blue", 3);
+            //console.log("text");
+
+            }
+
+        </script>
+    -->
+</body>
+</html>
+

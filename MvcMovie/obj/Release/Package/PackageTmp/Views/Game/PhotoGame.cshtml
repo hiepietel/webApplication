@@ -1,0 +1,81 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Dokument bez tytułu</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#game").hide();
+            $("#end").hide();
+            $("#nextButton").hide();
+            $("#intro").click(function () {
+                $("#game").show();
+
+                $("#intro").hide();
+            });
+        });
+        function gameOverShow() {
+            $("#game").hide();
+            $("#end").show();
+        }
+        function nextLevelShow() {
+            $("#nextButton").show();
+        }
+        function nextLevelHide() {
+            $("#nextButton").hide();
+        }
+    </script>
+    <link rel="stylesheet" type="text/css" href="~/Styles/PhotoGame.css">
+</head>
+
+<body>
+    <div id="intro">
+        <h1>In this game the tast is connect images correctly<br /> <b>Press Start to start the game</b></h1>
+        <button type="button" class="btn btn-success btn-lg" onClick="gameLoop()">start game</button>
+
+    </div>
+    <div class="holder">
+        <div id="game">
+        <ul id="puzzle">
+            <li class="puzzle-piece" draggable="true">
+                <img id="p11" src="~/Photos/img23.png">
+            </li>
+            <li class="puzzle-piece" draggable="true">
+                <img id="p12" src="~/Photos/img12.png">
+            </li>
+            <li class="puzzle-piece" draggable="true">
+                <img id="p13" src="~/Photos/img21.png">
+            </li>
+            <li class="puzzle-piece" draggable="true">
+                <img id="p21" src="~/Photos/img22.png">
+            </li>
+            <li class="puzzle-piece" draggable="true">
+                <img id="p22" src="~/Photos/img11.png">
+            </li>
+            <li class="puzzle-piece" draggable="true">
+                <img id="p23" src="~/Photos/img13.png">
+            </li>
+
+        </ul>
+        </div>
+        
+            <button type="button" class="btn btn-lg" onClick="nextLevel()" id="nextButton">next level</button>
+    </div>
+    <div id="end">
+        <h1>
+            brawo! udalo Ci sie dobrze rozwiazac zadania!
+        </h1>
+        <p id="time"></p>
+    </div>
+    <script src="~/Scripts/PhotoGame.js"></script>
+</body>
+</html>
+
+
+

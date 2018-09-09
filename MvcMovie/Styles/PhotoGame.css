@@ -1,0 +1,50 @@
+﻿#intro, #end {
+    text-align: center;
+    width: 100%;
+}
+
+#nextButton {
+    text-align: center;
+    margin: 0 auto;
+    display: inline-block;
+}
+
+#game {
+    width: 700px;
+    margin: 0 auto;
+}
+
+ul, li {
+    list-style: none;
+}
+
+img {
+    vertical-align: top;
+    width: 200px;
+    height: 200px;
+}
+
+#puzzle {
+    width: 700px;
+    margin: 0px auto;
+    margin-left: 70px;
+}
+
+    #puzzle:after {
+        content: "";
+        display: block;
+        clear: both;
+    }
+
+    #puzzle .puzzle-piece {
+        float: left;
+    }
+
+        #puzzle .puzzle-piece.start {
+            background: #eaf2fe;
+            width: auto;
+        }
+
+        #puzzle .puzzle-piece.over {
+            background: #d5d5d5;
+        }
